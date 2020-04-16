@@ -9,10 +9,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         choice = input('Enter choice')
         if not choice.isdigit():
             continue
+        if choice=='4':
+            break
+		if  choice =='5':
+            s.sendall( (choice.encode()))
+            break
         s.sendall( (choice.encode()))
         data = s.recv(1024)
         
         print('Received', data.decode())
-        if choice=='4':
-            break
-    conn.close()

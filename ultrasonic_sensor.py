@@ -75,14 +75,14 @@ def sensor_choice(choice):
         Echo=GPIO_ECHO_3
     else:
         print("Not valid choice")
-        return False
+        return False, 'False'
     Set= (Trigger, Echo)
     print (choice)
     dist_old= distance(Trigger,Echo)
     countdown=time.time()
     countdown_end=time.time()
     countdown_diff=countdown_end-countdown
-    while countdown_diff<15:
+    while countdown_diff<5:
         passing_through = False
         dist_old, passing_through= passing_true (dist_old,Set)
         if (passing_through): #5cm
@@ -102,7 +102,7 @@ if __name__ == '__main__': #def passing_true(), return true flase value, update 
             if choice.isdigit():
                 thrown, thrown_string= sensor_choice(int (choice))
             else:
-                print('choice not valid')
+                print('Not valid choice')
             
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:
@@ -110,3 +110,4 @@ if __name__ == '__main__': #def passing_true(), return true flase value, update 
         GPIO.cleanup()
 
  
+
