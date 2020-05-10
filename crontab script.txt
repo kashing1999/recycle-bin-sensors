@@ -1,0 +1,4 @@
+
+@reboot python3 /home/pi/Desktop/echo_server.py &
+*     *     *     *     *         /bin/bash /home/pi/ssh.sh
+

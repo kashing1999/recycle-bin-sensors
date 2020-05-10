@@ -6,14 +6,13 @@ import time
 GPIO.setmode(GPIO.BCM)
  
 #set GPIO Pins
-GPIO_TRIGGER_1 = 23
-GPIO_ECHO_1 = 24
+GPIO_ECHO_1 = 23
+GPIO_ECHO_2 = 24
+GPIO_ECHO_3 = 8
 
-GPIO_TRIGGER_2 = 7
-GPIO_ECHO_2 = 8
-
-GPIO_TRIGGER_3 = 20
-GPIO_ECHO_3 = 21
+GPIO_TRIGGER_1 = 7
+GPIO_TRIGGER_2 = 20
+GPIO_TRIGGER_3 = 21
 
 
 #set GPIO direction (IN / OUT)
@@ -27,6 +26,7 @@ GPIO.setup(GPIO_TRIGGER_3, GPIO.OUT)
 GPIO.setup(GPIO_ECHO_3, GPIO.IN)
 
 def distance(TRIGGER, ECHO):
+
     # set Trigger to HIGH
     GPIO.output(TRIGGER, True)
  
@@ -34,24 +34,20 @@ def distance(TRIGGER, ECHO):
     time.sleep(0.00001)
     GPIO.output(TRIGGER, False)
     
-    WaitTime = time.time()
     StartTime = time.time()
     StopTime = time.time()
-    waiting = StartTime-WaitTime
     # save StartTime
     while GPIO.input(ECHO) == 0:
         StartTime = time.time()
- 
+
     # save time of arrival
     while GPIO.input(ECHO) == 1:
         StopTime = time.time()
- 
     # time difference between start and arrival
     TimeElapsed = StopTime - StartTime
     # multiply with the sonic speed (34300 cm/s)
     # and divide by 2, because there and back
     distance = (TimeElapsed * 34300) / 2
- 
     return distance
 
 def passing_true(dist_old,SET):
@@ -60,6 +56,8 @@ def passing_true(dist_old,SET):
     passing = False
     if (dist_new>dist_old+5 or dist_new<dist_old-5): #5cm 
         passing= True
+        print ('dist_diff=')
+        print(dist_old-dist_new)
     
     return dist_new, passing
 
@@ -88,10 +86,11 @@ def sensor_choice(choice):
         if (passing_through): #5cm
             print ("Passing through")
             passing_through= False
+            print(dist_old)
             return True, 'True'
         
         countdown_end=time.time()
-        time.sleep(0.0005)
+        time.sleep(0.025)
         countdown_diff=countdown_end-countdown
     print ('Time overlap')
     return False, 'False'
@@ -110,4 +109,5 @@ if __name__ == '__main__': #def passing_true(), return true flase value, update 
         GPIO.cleanup()
 
  
+
 
